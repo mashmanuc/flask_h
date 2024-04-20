@@ -1,15 +1,9 @@
 
-
-
-
-import logging
-from logging import Formatter, FileHandler
-
-from cread_app import app,db
+from cread_app import app
 
     
 
-from flask import redirect, request, render_template, url_for, flash 
+from flask import redirect, request, render_template
 
 
 
@@ -25,5 +19,5 @@ def home():
 #----------------------------------------------------------------------------#
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9090, debug=True)
+    app.run(host='0.0.0.0', port=9090)
 
