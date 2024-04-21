@@ -1,0 +1,60 @@
+{% extends 'base_ad.html' %}
+{% block title %} сайту {% endblock %}
+{% block sitebar %}
+<h1>Панель сайту</h1>
+{% endblock %}
+
+{% block body %}
+    {% for data in pagination[0] %}
+
+
+    <form class="form-inline">
+
+        <li><p style="vertical-align: inherit;">    {{ data.test_name }}
+
+            <a  class="btn btn-sm btn-outline-secondary"href="/admin/testes_ad/{{ data.id }}">Відкрити</a>
+
+            <a  class="btn btn-sm btn-outline-secondary"href="{{ url_for('admin.dell_test_tema_ad', id=data.id)}}">Видалити</a>
+
+            <a  class="btn btn-sm btn-outline-secondary"href="#">Редагувати</a></li></p>
+      </form>
+
+
+
+
+
+{% endfor %}
+
+     {# Access the first element of the tuple #}
+
+    <div class="pagination">
+        <ul class="pagination">
+            {% if pagination[1]['page'] > 1 %}
+                <li class="page-item"><a  class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.tema_test_ad', id=id, page=pagination[1]['page'] - 1) }}"><<<...</a></li>
+            {% endif %}
+            {% for page_num in range(1, pagination[1]['max_page'] + 1) %}
+                {# Покажіть активну сторінку і три попередні #}
+                {% if pagination[1]['page'] - 5 <= page_num <= pagination[1]['page'] %}
+                    <li class="page-item{% if page_num == pagination[1]['page'] %} active{% endif %}">
+                        <a  class="btn btn-sm btn-outline-secondary"href="{{ url_for('admin.tema_test_ad', id=id, page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                {# Покажіть активну сторінку і три наступні #}
+                {% elif pagination[1]['page'] <= page_num <= pagination[1]['page'] + 9 %}
+                    <li class="page-item{% if page_num == pagination[1]['page'] %} active{% endif %}">
+                        <a  class="btn btn-sm btn-outline-secondary"  href="{{ url_for('admin.tema_test_ad', id=id, page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                {# В іншому випадку, покажіть "..." для додаткових сторінок #}
+                {% elif page_num == pagination[1]['page'] - 6 or page_num == pagination[1]['page'] + 11 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+            {% if pagination[1]['page'] < pagination[1]['max_page'] %}
+                <li class="page-item"><a  class="btn btn-sm btn-outline-secondary"  href="{{ url_for('admin.tema_test_ad', id=id, page=pagination[1]['page'] + 1) }}">...>>></a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+
+
+
+{% endblock %}

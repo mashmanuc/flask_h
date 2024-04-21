@@ -1,0 +1,36 @@
+{% extends 'base_ad.html' %}
+{%block title %}<title>Claass</title>{%endblock%}
+
+{% block body %}
+<form action="{{ url_for('admin.edit_test', test_id=test.id) }}" method="POST">
+
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      {{ form.num_quest.label() }}
+      {{ form.num_quest(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.quest_img.label() }}
+      {{ form.quest_img(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.quest_text.label() }}
+      {{ form.quest_text(class="form-control", value=form.quest_text.data) }}
+    </div>
+
+    <div class="form-group">
+      {{ form.ans_data.label() }}
+      {{ form.ans_data(class="form-control", style="height: 150px;") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.vidpov.label() }}
+      {{ form.vidpov(class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ form.submit() }}
+
+  {% endblock %}

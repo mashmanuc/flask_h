@@ -1,0 +1,79 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %}
+
+<title>Тести</title>{% endblock %}
+
+{% block body %}
+<main role="main">
+    <h2> {{temma.test_name}}</h2>
+
+
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+         <form action=" # " method="POST">
+            <div class="form-group">
+      </div>
+            <div class="row">
+                <div class="textwidget custom-html-widget">
+
+                </div>
+                <div class="col-md-12">
+                    {% for test, ans in data|zip(m_ans) %}
+                    <div class="card mb-4 shadow-sm">
+                        {{ test.num_quest }}
+
+
+
+                        {% if test.quest_img is defined %}
+                            <div class="textwidget custom-html-widget">
+                                <img src="{{ test.quest_img }}" alt="">
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            {% if test.quest_text is defined %}
+                                <div class="card-text">{{ test.quest_text }}</div>
+                            {% endif %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            {% set matching_button = false %}
+                                            {% for an in ans %}
+                                                {% set is_matching = false %}
+                                                {% for n_t, v_t in tata %}
+                                                    {% if n_t == test.id and v_t == an %}
+                                                        {% set matching_button = true %}
+                                                        {% set is_matching = true %}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0v6z"/>
+                                                          </svg>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if (not is_matching) and (not matching_button) %}
+                                                    <button type="button" class="btn btn-sm btn-other-style">
+                                                        <a class="btn btn-dark" href="{{ url_for('uroki.save_test', tema_test_id=temma.id, test_id=test.id, an=an) }}">{{an}}</a>
+                                                    </button>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            </form>
+          </div>
+    </div>
+
+</main>
+{% endblock %}
