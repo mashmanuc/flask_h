@@ -7,15 +7,14 @@ from cread_app import app
 from func import *
 title='Goooooo'
 uroki= Blueprint('uroki', __name__, template_folder='templates')
-@uroki.before_request
-def create_app_context():
-    with app.app_context():
-        from models import dinamic, add_user_test,user_res_test,vidsotok,user_test, find_vid
+# @uroki.before_request
+# def create_app_context():
+#     with app.app_context():
+#         from models import dinamic, add_user_test,user_res_test,vidsotok,user_test, find_vid,get_all_items, Predmet, Claass, Tema_test, Test, find_temi_by_test, find_temi_by_predmet, find_Tema_test_by_id, ob1_ob2, mass_ans, first_tema_test, find_temy_site, min_max_test_id, tes_ans, find_test
 
         
-from model import (get_all_items, Predmet, Claass, Tema_test, Test, find_temi_by_test, find_temi_by_predmet, find_Tema_test_by_id,
-    ob1_ob2, mass_ans, first_tema_test, find_temy_site, min_max_test_id, tes_ans, find_test)
-from models import dinamic, add_user_test,user_res_test,vidsotok,user_test, find_vid
+from model import get_all_items, Predmet, Claass, Tema_test, Test, find_temi_by_test, find_temi_by_predmet, find_Tema_test_by_id, ob1_ob2, mass_ans, first_tema_test, find_temy_site, min_max_test_id, tes_ans, find_test
+from models import User, User_test, add_user_test, user_test, user_res_test, dinamic, get_user_by_username, add_user_to_database, user_t_ans, find_vid, vidsotok
 
 
 

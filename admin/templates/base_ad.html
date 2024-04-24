@@ -1,0 +1,88 @@
+<html lang="uk" class="translated-ltr"><merlin-component id="merlin-text-summarizer" class="merlin text-summarizer"></merlin-component><merlin-component id="merlin-context-btn" class="merlin context-btn"></merlin-component><merlin-component id="merlin-chat" class="merlin chat"></merlin-component><head>
+  <meta charset="utf-8">
+  <title>{%block title%}  {%endblock%}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3"  href="#"><font-size style="vertical-align: inherit;"><font-size style="vertical-align: inherit;"> УРОКІВ NET</font-size></font-size></a>
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Увімкнути навігацію">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <form class="form" method="GET" action="/admin/serch_ad">
+        <input class="form-control form-control-dark w-100" name="title_sersh" id="title_sersh" type="text" placeholder="Пошук" aria-label="Пошук">
+        <button class="btn btn-sm btn-outline-secondary"  type="submit">Знайти</button>
+      </form>
+
+
+    </nav>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+
+
+   <!-- <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="/serch_"><font-size style="vertical-align: inherit;"><font-size style="vertical-align: inherit;">Пошук</font-size></font-size></a>
+    </li>
+  </ul>-->
+</nav>
+
+<div class="container-fluid">
+<div class="row">
+  <nav id="sidebarMenu"  class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="sidebar-sticky pt-3">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link"  href="/">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg><font-size style="vertical-align: inherit;"><font-size style="vertical-align: inherit;">
+            Головна
+          </font-size></font-size></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  href="/admin/claass_ad">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+              <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+            </svg>
+                 Класи
+          </font-size></font-size></a>
+        </li>
+      </ul>
+
+
+      <ul class="nav flex-column mb-2">
+        <li class="nav-item">
+          <a class="nav-link"  href="/admin">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><font-size style="vertical-align: inherit;"><font-size style="vertical-align: inherit;">
+              АДМІНКА
+          </font-size></font-size></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">{% block sitebar %}
+          {% endblock %}
+        </div>
+
+      </div>
+    </div>
+    {% block body %}
+    {% endblock %}
+
+    <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="920" height="388" style="display: block; width: 920px; height: 388px;"></canvas>
+
+    <div class="table-responsive">
+
+  </div>
+  </main>
+</div>
+</div>
+
+
+
+
+</body>
+</html>

@@ -153,10 +153,3 @@ def vidsotok(users_id, tema_test_id):
 
 
 
-
-
-
-
-
-with app.app_context():
-    db.create_all()

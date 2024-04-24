@@ -1,0 +1,20 @@
+[
+    {
+        "email": "papa@pa.pa",
+        "id": 1,
+        "password": "$5$rounds=535000$4Y82YhYQBIWgsqtD$hnJ7ktko1MpHX0tQiuBe2eXyGVS5GizTju0a9J5kZ24",
+        "username": "papapa"
+    },
+    {
+        "email": "macfshmanuc@gmail.com",
+        "id": 2,
+        "password": "$5$rounds=535000$ea3VCKh1rkLd/gml$n8TeIqsq.zl1FGy1wVQetee9Xf3rCmBHZ8mX./VFcm3",
+        "username": "dnipro"
+    },
+    {
+        "email": "mashmanuc3@gmail.com",
+        "id": 3,
+        "password": "$5$rounds=535000$W5BAur3TQhKBX4YN$f7vKdPGRNPPVY7dB/rEYyywL8cHQWNbpjuT8RhfIdt.",
+        "username": "suma03"
+    }
+]

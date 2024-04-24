@@ -1,0 +1,18 @@
+{% extends 'base_ad.html' %}
+{%block title %}<title>Claass</title>{%endblock%}
+
+<main>
+     {% block sitebar %}
+             {% for data in claasses%}
+
+                <a class="btn btn-xm btn-outline-secondary" href="/admin/tema_test_ad/{{ data.id}}">
+                    {{ data.claass_name }}</a>
+                </font></font></a>
+            {% endfor %}
+         {% endblock %}
+
+    {% block body %}<div class="container">
+
+</main>
+
+{% endblock %}

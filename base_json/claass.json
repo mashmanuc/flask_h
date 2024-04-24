@@ -1,0 +1,42 @@
+[
+    {
+        "claass_name": "5 математика",
+        "id": 1,
+        "predmet_id": 1
+    },
+    {
+        "claass_name": "6 математика",
+        "id": 2,
+        "predmet_id": 1
+    },
+    {
+        "claass_name": "7 алгебра",
+        "id": 3,
+        "predmet_id": 2
+    },
+    {
+        "claass_name": "7 геометрія",
+        "id": 4,
+        "predmet_id": 3
+    },
+    {
+        "claass_name": "8 алгебра",
+        "id": 5,
+        "predmet_id": 2
+    },
+    {
+        "claass_name": "8 геометрія",
+        "id": 6,
+        "predmet_id": 3
+    },
+    {
+        "claass_name": "9 алгебра",
+        "id": 7,
+        "predmet_id": 2
+    },
+    {
+        "claass_name": "9 геометрія",
+        "id": 8,
+        "predmet_id": 3
+    }
+]

@@ -3,3 +3,73 @@
 2024-04-21 10:21:54,075 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
 2024-04-21 10:25:13,430 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
 2024-04-23 07:25:50,322 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-23 21:33:17,494 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-23 21:55:58,360 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-23 21:56:02,226 ERROR: Exception on / [GET] [in E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "e:\project\heroku_flask_test\flask_h\app.py", line 56, in home
+    return render_template('pages/placeholder.home.html')
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\templating.py", line 129, in _render
+    app.update_template_context(context)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 480, in update_template_context
+    context.update(self.ensure_sync(func)())
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask_login\utils.py", line 405, in _user_context_processor
+    return dict(current_user=_get_user())
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask_login\utils.py", line 370, in _get_user
+    current_app.login_manager._load_user()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask_login\login_manager.py", line 376, in _load_user
+    user = self._load_user_from_remember_cookie(cookie)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask_login\login_manager.py", line 414, in _load_user_from_remember_cookie
+    user_id = decode_cookie(cookie)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask_login\utils.py", line 62, in decode_cookie
+    if hmac.compare_digest(_cookie_digest(payload, key=key), digest):
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask_login\utils.py", line 380, in _cookie_digest
+    return hmac.new(key, payload.encode("utf-8"), sha512).hexdigest()
+  File "C:\Users\0000\AppData\Local\Programs\Python\Python310\lib\hmac.py", line 184, in new
+    return HMAC(key, msg, digestmod)
+  File "C:\Users\0000\AppData\Local\Programs\Python\Python310\lib\hmac.py", line 53, in __init__
+    raise TypeError("key: expected bytes or bytearray, but got %r" % type(key).__name__)
+TypeError: key: expected bytes or bytearray, but got 'NoneType'
+2024-04-23 21:57:33,395 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-23 22:13:11,946 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-23 22:31:22,014 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-23 22:49:37,877 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:132]
+2024-04-24 00:14:39,937 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:133]
+2024-04-24 00:32:46,168 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:133]
+2024-04-24 00:39:52,665 ERROR: Exception on /admin/tema_test_ad/2864 [GET] [in E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "e:\project\heroku_flask_test\flask_h\admin\admin.py", line 40, in tema_test_ad
+    pre=find_claass(test_names[0].claass_id)
+IndexError: list index out of range
+2024-04-24 00:40:19,290 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:133]
+2024-04-24 00:40:35,513 ERROR: Exception on /admin/tema_test_ad/2864 [GET] [in E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "e:\project\heroku_flask_test\flask_h\admin\admin.py", line 40, in tema_test_ad
+    pre=find_claass(test_names[0].claass_id)
+IndexError: list index out of range

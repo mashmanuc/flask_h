@@ -22,7 +22,8 @@ from flask import redirect, request, render_template, url_for, flash
 
 from uroki.uroki import uroki
 app.register_blueprint(uroki, url_prefix='/uroki')
-
+from admin.admin import admin
+app.register_blueprint(admin, url_prefix='/admin')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
