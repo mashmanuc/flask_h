@@ -73,3 +73,60 @@ Traceback (most recent call last):
   File "e:\project\heroku_flask_test\flask_h\admin\admin.py", line 40, in tema_test_ad
     pre=find_claass(test_names[0].claass_id)
 IndexError: list index out of range
+2024-04-24 00:58:09,358 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:133]
+2024-04-24 00:58:50,040 ERROR: Exception on /uroki/page_test/1/ [GET] [in E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such column: user_test.num_quest
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "e:\project\heroku_flask_test\flask_h\uroki\uroki.py", line 101, in page_test
+    tata=find_vid(users_id, tema_test_id, test.id)
+  File "e:\project\heroku_flask_test\flask_h\models\models.py", line 120, in find_vid
+    user_test_record = User_test.query.filter_by(users_id=users_id, tema_test_id=tema_test_id, test_id=test_id).first()
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\orm\query.py", line 2748, in first
+    return self.limit(1)._iter().first()  # type: ignore
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\orm\query.py", line 2847, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\orm\session.py", line 2308, in execute
+    return self._execute_internal(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\orm\session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\orm\context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 1416, in execute
+    return meth(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\sql\elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 2343, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "E:\project\heroku_flask_test\flask_h\.venv\lib\site-packages\sqlalchemy\engine\default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: user_test.num_quest
+[SQL: SELECT user_test.id AS user_test_id, user_test.num_quest AS user_test_num_quest, user_test.users_id AS user_test_users_id, user_test.tema_test_id AS user_test_tema_test_id, user_test.test_id AS user_test_test_id, user_test.vid AS user_test_vid, user_test.pr_vid AS user_test_pr_vid, user_test.date_completed AS user_test_date_completed 
+FROM user_test 
+WHERE user_test.users_id = ? AND user_test.tema_test_id = ? AND user_test.test_id = ?
+ LIMIT ? OFFSET ?]
+[parameters: (4, 1, 1, 1, 0)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
