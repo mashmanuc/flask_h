@@ -42,7 +42,7 @@ for predmet in predmets:
             test_list = []
 
             # Перевірка наявності таблиці Test
-            cursor.execute("PRAGMA table_info(Test)")
+            cursor.execute("PRAGMA table_info(Tests)")
             table_info = cursor.fetchall()
             if table_info:
                 cursor.execute("SELECT id, num_quest, quest_img, quest_text, ans_data, vidpov FROM Tests WHERE tema_test_id = ?", (tema_test_id,))

@@ -1,67 +1,62 @@
-
-
-
+from flask import Flask, redirect, request, render_template, url_for, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 import logging
 from logging import Formatter, FileHandler
-from forms import *
-from cread_app import app,db
-with app.app_context():
-    from models import  get_user_by_username,add_user_to_database
-    
-# Створюємо контекст додатку для Flask
-with app.app_context():
-    # Імпортуємо функції з model.py після створення контексту додатку
-    from models import *
-from flask import redirect, request, render_template, url_for, flash 
+from forms import LoginForm, RegisterForm
+from config import Config
 
-#----------------------------------------------------------------------------#
-# App Config.
-#----------------------------------------------------------------------------#
+# Створюємо екземпляр додатку Flask
+app = Flask(__name__)
+from models import User,users_collection
+# Конфігурація Flask (наприклад, секретний ключ)
+app.config.from_object(Config)
 
 
+# Імпортуємо функції з моделей MongoDB
+
+
+# Імпортуємо сторінки для різних розділів (наприклад, урокі, адмін-панель)
 from uroki.uroki import uroki
 app.register_blueprint(uroki, url_prefix='/uroki')
 from admin.admin import admin
 app.register_blueprint(admin, url_prefix='/admin')
+
+# Ініціалізація Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# Клас для представлення користувача у Flask-Login
 class LoginUser(UserMixin):
     @property
     def is_admin(self):
         return self.is_authenticated and self.id == 'admin'
-        # TODO: YOU NEED TO IMPLEMENT THIS!! A SUGGESTION IS ADDING A "ROLE" COLUMN TO THE USER DATABSE
 
-@app.before_request
-def create_app_context():
-    with app.app_context():
-        pass
+# Завантаження користувача для Flask-Login
+
 @login_manager.user_loader
 def user_loader(username):
-    user = get_user_by_username(username)
+    user = User.get_user_by_username(username, users_collection)  # Pass users_collection
     if user is None:
         return None
 
     login_user = LoginUser()
-    login_user.id = user.id  # Отримуємо ID користувача з об'єкта User
-    login_user.username = user.username
+    login_user.id = user.get('username')
+    login_user.username = user.get('username')
     # Додайте інші поля користувача, які вам потрібні
 
     return login_user
-#----------------------------------------------------------------------------#
 
+# Головна сторінка
 @app.route('/')
 def home():
-    
-        return render_template('pages/placeholder.home.html')
+    return render_template('pages/placeholder.home.html')
 
-
-
+# Сторінка "Про нас"
 @app.route('/about')
 def about():
     return render_template('pages/placeholder.about.html')
 
+# Сторінка профілю користувача
 @app.route('/profile')
 @login_required
 def profile():
@@ -82,15 +77,25 @@ def profile():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = get_user_by_username(form.username.data)
-        if user and user.checkPassword(form.password.data):
-            luser = LoginUser()
-            luser.id = user.username
-            if login_user(luser, remember=True):
+        username = form.username.data
+        password = form.password.data
+
+        # Fetch user by username
+        user = User.get_user_by_username(username, users_collection)
+
+        # Validate credentials (if user is found)
+        if user:
+            if user.checkPassword(password):
+                # User authenticated successfully
+                login_user(user, remember=form.remember_me.data)  # Use user object for login
                 return redirect(url_for('home'))
-            else: return "bad"
+            else:
+                # Invalid password
+                flash('Invalid password.', 'danger')  # Use a category for styling
         else:
-            flash('Invalid username or password.')
+            # Username not found
+            flash('Invalid username or password.', 'danger')  # More generic message
+
     return render_template('forms/login.html', form=form)
 
 
@@ -98,30 +103,29 @@ def login():
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        if not  add_user_to_database(form.username.data, form.email.data, form.password.data):
-             return redirect(url_for('register'))
+        if not User.add_user_to_database(form.username.data, form.email.data, form.password.data, users_collection):  # Pass users_collection
+            return redirect(url_for('register'))
         flash('Тепер ви зареєстровані та можете увійти!', 'success')
         return redirect(url_for('login'))
     return render_template('forms/register.html', form=form)
-
+# Вихід з облікового запису
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash("Ви успішно вийшли."," 'success'")
+    flash("Ви успішно вийшли.", "success")
     return redirect(url_for('home'))
 
-# Error handlers ------------------------------------------------------------#
-
+# Обробники помилок
 @app.errorhandler(500)
 def internal_error(error):
     return render_template('errors/500.html'), 500
-
 
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
 
+# Налаштування логування
 if not app.debug:
     file_handler = FileHandler('error.log')
     file_handler.setFormatter(
@@ -132,12 +136,6 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
 
-#----------------------------------------------------------------------------#
-@app.shell_context_processor
-def make_shell_context():
-    return {'db': db}
-#----------------------------------------------------------------------------#
-
+# Запуск додатку
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9090)
-
+    app.run(host='0.0.0.0', port=9090, debug=True)

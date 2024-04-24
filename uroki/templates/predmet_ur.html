@@ -4,12 +4,12 @@
     <h1>predmet_name</h1>
     <div class="container">
         <div class="row row-cols-1 row-cols-md-1 mb-1 text-center">
-            <h1>{{ predmet.predmet_name }}</h1>
+            <h1>{{ predmet['predmet_name'] }}</h1>
 
             <h2>Claasses:</h2>
             <ul>
                 {% for claass in claass_list %}
-                    <li>{{ claass.claass_name }}</li>
+                    <li>{{ claass['claass_name'] }}</li>
                 {% endfor %}
             </ul>
 

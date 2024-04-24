@@ -1,301 +1,267 @@
-from cread_app import db, app, create_tables
-from datetime import datetime
+from pymongo import MongoClient
+import os
 
-class Predmet(db.Model):
-    __tablename__ = 'predmet'
-    id = db.Column(db.Integer, primary_key=True)
-    predmet_name = db.Column(db.String(255), nullable=False)
-
-    def __init__(self, predmet_name):
-        self.predmet_name = predmet_name
-
-class Claass(db.Model):
-    __tablename__ = 'claass'
-    id = db.Column(db.Integer, primary_key=True)
-    claass_name = db.Column(db.String(255), nullable=False)
-    predmet_id = db.Column(db.Integer, db.ForeignKey('predmet.id'), nullable=False)
-
-    def __init__(self, claass_name, predmet_id):
-        self.claass_name = claass_name
-        self.predmet_id = predmet_id
-
-class Tema_test(db.Model):
-    __tablename__ = 'tema_test'
-    id = db.Column(db.Integer, primary_key=True)
-    test_name = db.Column(db.String(255), nullable=False)
-    claass_id = db.Column(db.Integer, db.ForeignKey('claass.id'), nullable=False)
-
-    def __init__(self, test_name, claass_id):
-        self.test_name = test_name
-        self.claass_id = claass_id
-
-class Test(db.Model):
-    __tablename__ = 'tests'
-    id = db.Column(db.Integer, primary_key=True)
-    num_quest = db.Column(db.String(255), nullable=False)
-    quest_img = db.Column(db.String(255), nullable=False)
-    quest_text = db.Column(db.String(255), nullable=False)
-    ans_data = db.Column(db.String(255), nullable=False)
-    vidpov = db.Column(db.String(255), nullable=False)
-    tema_test_id = db.Column(db.Integer, db.ForeignKey('tema_test.id'), nullable=False)
-
-    def __init__(self, num_quest, quest_img, quest_text, ans_data, vidpov, tema_test_id):
-        self.num_quest = num_quest
-        self.quest_img = quest_img
-        self.quest_text = quest_text
-        self.ans_data = ans_data
-        self.vidpov = vidpov
-        self.tema_test_id = tema_test_id
-
-class Temy_site(db.Model):
-    __tablename__ = 'tema_site'
-    id = db.Column(db.Integer, primary_key=True)
-    tema_test_id = db.Column(db.Integer, nullable=False)
-
-    def __init__(self, tema_test_id):
-        self.tema_test_id = tema_test_id
+# Підключення до MongoDB
+mongo_key = os.environ.get('mongo_key')
+client = MongoClient("mongodb+srv://mashmanuc:1WTFCFWcW5gbAYCU@cluster0.vbybi6i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongo_db = client['users']
+collection_predmet = mongo_db['predmet']
+collection_claass = mongo_db['claass']
+collection_tema_test = mongo_db['tema_test']
+collection_tests = mongo_db['tests']
+collection_tema_site = mongo_db['tema_site']
 
 def add_predmet(predmet_name):
-    with app.app_context():
-        try:
-            new_predmet = Predmet(predmet_name=predmet_name)
-            db.session.add(new_predmet)
-            db.session.commit()
-        except Exception as e:
-            print(f"Помилка додавання предмету: {e}")
+    try:
+        predmet_data = {'predmet_name': predmet_name}
+        result = collection_predmet.insert_one(predmet_data)
+        return result.inserted_id
+    except Exception as e:
+        print(f"Помилка додавання предмету: {e}")
+        return None
 
 def add_claass(claass_name, predmet_id):
-    with app.app_context():
-        try:
-            new_claass = Claass(claass_name=claass_name, predmet_id=predmet_id)
-            db.session.add(new_claass)
-            db.session.commit()
-        except Exception as e:
-            print(f"Помилка додавання предмету: {e}")
+    try:
+        claass_data = {'claass_name': claass_name, 'predmet_id': predmet_id}
+        result = collection_claass.insert_one(claass_data)
+        return result.inserted_id
+    except Exception as e:
+        print(f"Помилка додавання класу: {e}")
+        return None
 
 def add_Tema_test(test_name, claass_id):
-    with app.app_context():
-        try:
-            new_Tema_test = Tema_test(test_name=test_name, claass_id=claass_id)
-            db.session.add(new_Tema_test)
-            db.session.commit()
-        except Exception as e:
-            print(f"Помилка додавання теми: {e}")
+    try:
+        tema_test_data = {'test_name': test_name, 'claass_id': claass_id, 'test_list': []}
+        result = collection_tema_test.insert_one(tema_test_data)
+        return result.inserted_id
+    except Exception as e:
+        print(f"Помилка додавання теми тесту: {e}")
+        return None
 
-def add_oun_temy_site(id_):
-    with app.app_context():
-        try:
-            new_temy = Temy_site(tema_test_id=id_)
-            db.session.add(new_temy)
-            db.session.commit()
-        except Exception as e:
-            print(f"Помилка додавання предмету: {e}")
+def add_oun_temy_site(tema_test_id):
+    try:
+        tema_site_data = {'tema_test_id': tema_test_id}
+        collection_tema_site.insert_one(tema_site_data)
+    except Exception as e:
+        print(f"Помилка додавання теми на сайт: {e}")
 
 def find_temy_site():
-    
-        mass = []
-        try:
-            with app.app_context():
-                t_site = Temy_site.query.all()
-            for i in t_site:
-                obj = find_Tema_test_by_id(i.tema_test_id)
-                mass.append(obj)
-            print(t_site)
-        except Exception as e:
-            print(f"Пока тем не існує: {e}")
+    try:
+        tema_tests = collection_tema_site.find({}, {'tema_test_id': 1, '_id': 0})
+        tema_test_ids = [doc['tema_test_id'] for doc in tema_tests]
+        tema_tests_data = list(collection_tema_test.find({'id': {'$in': tema_test_ids}}))
+        return tema_tests_data
+    except Exception as e:
+        print(f"Помилка пошуку тем на сайті: {e}")
+        return []
 
-        return mass
+def ob1_ob2(predmet_id=1):
+    try:
+        predmet = collection_predmet.find_one({'id': predmet_id})
+        claass_list = list(collection_claass.find({'predmet_id': predmet_id}))
+        return claass_list
+    except Exception as e:
+        print(f"Помилка пошуку класів для предмету: {e}")
+        return []
 
-def ob1_ob2(classs=Predmet, id=1):
-    with app.app_context():
-        predmet = classs.query.filter_by(id=id).first()
-        return predmet.claass_list
-
-def ob2_ob3(classs=Claass, id=1):
-    with app.app_context():
-        claass = classs.query.filter_by(id=id).first()
-        return claass.tema_test_list
+def ob2_ob3(claass_id=1):
+    try:
+        claass = collection_claass.find_one({'id': claass_id})
+        tema_test_list = list(collection_tema_test.find({'claass_id': claass_id}))
+        return tema_test_list
+    except Exception as e:
+        print(f"Помилка пошуку тем тестів для класу: {e}")
+        return []
 
 def find_last_Tema_test():
-    with app.app_context():
-        return Tema_test.query.order_by(Tema_test.id.desc()).first()
+    try:
+        return collection_tema_test.find().sort('id', -1).limit(1)
+    except Exception as e:
+        print(f"Помилка пошуку останньої теми тесту: {e}")
+        return None
 
-def find_claass(id):
-    with app.app_context():
-        return Claass.query.filter_by(id=id).first()
+def find_claass(claass_id):
+    try:
+        return collection_claass.find_one({'id': claass_id})
+    except Exception as e:
+        print(f"Помилка пошуку класу: {e}")
+        return None
 
-def find_Tema_test_by_id(Tema_test_id):
-    with app.app_context():
-        return Tema_test.query.filter_by(id=Tema_test_id).first()
+def find_Tema_test_by_id(tema_test_id):
+    try:
+        return collection_tema_test.find_one({'id': tema_test_id})
+    except Exception as e:
+        print(f"Помилка пошуку теми тесту: {e}")
+        return None
 
-def find_temi_by_predmet(id):
-    with app.app_context():
-        return Tema_test.query.filter(Tema_test.claass_id == id).all()
+def find_temi_by_predmet(predmet_id):
+    try:
+        claass_list = ob1_ob2(predmet_id)
+        claass_ids = [claass['id'] for claass in claass_list]
+        tema_tests = collection_tema_test.find({'claass_id': {'$in': claass_ids}})
+        return list(tema_tests)
+    except Exception as e:
+        print(f"Помилка пошуку тем тестів за предметом: {e}")
+        return []
 
-def find_temi_by_test(id):
-    with app.app_context():
-        return Test.query.filter(Test.tema_test_id == id).all()
+def find_temi_by_test(tema_test_id):
+    try:
+        tests = list(collection_tests.find({'tema_test_id': tema_test_id}))
+        return tests
+    except Exception as e:
+        print(f"Помилка пошуку тестів за темою тесту: {e}")
+        return []
 
 def find_test_to_slovo(slovo):
-    with app.app_context():
+    try:
         mass = []
         m_slovo = [word[:-2].lower() if len(word) > 3 else word for word in slovo.split()]
-        try:
-            last_Tema_test = Tema_test.query.all()
-            for tema in last_Tema_test:
-                m_text = [word[:-2].lower() if len(word) > 3 else word for word in tema.test_name.split()]
-                fl = False
-                for i in m_slovo:
-                    if (len(i) < 4) or (i in m_text):
-                        fl = True
-                    else:
-                        fl = False
-                        break
-                if fl:
-                    mass.append(tema)
-            return mass
-        except Exception as e:
-            print(f"Помилка пошуку останньої теми: {e}")
+        tema_tests = collection_tema_test.find()
+        for tema in tema_tests:
+            m_text = [word[:-2].lower() if len(word) > 3 else word for word in tema['test_name'].split()]
+            fl = False
+            for i in m_slovo:
+                if (len(i) < 4) or (i in m_text):
+                    fl = True
+                else:
+                    fl = False
+                    break
+            if fl:
+                mass.append(tema)
+        return mass
+    except Exception as e:
+        print(f"Помилка пошуку тем тестів за словом: {e}")
+        return []
 
+def mass_ans(tema_test_id):
+    try:
+        tests = find_temi_by_test(tema_test_id)
+        ans_data = [test['ans_data'].replace("\n", "").replace('\r', '').replace('\xa0', '').split('!') for test in tests]
+        return ans_data
+    except Exception as e:
+        print(f"Помилка отримання масиву відповідей: {e}")
+        return []
 
-def mass_ans(id):
-    return [item.ans_data.replace("\n", "").replace('\r', '').replace('\xa0', '').split('!') for item in find_temi_by_test(id)]
+def tes_ans(test_id):
+    try:
+        test = collection_tests.find_one({'id': test_id})
+        ans_data = test['ans_data'].replace("\n", "").replace('\r', '').replace('\xa0', '').split('!')
+        return ans_data
+    except Exception as e:
+        print(f"Помилка отримання відповідей тесту: {e}")
+        return []
 
-def tes_ans(id_):
-    with app.app_context():
-        try:
-            test = Test.query.filter_by(id=id_).first()
-            return test.ans_data.replace("\n", "").replace('\r', '').replace('\xa0', '').split('!')
-        except Exception as e:
-            print(f"Помилка пошуку тем за предметом: {e}")
-            return []
-
-def find_test(id_):
-    with app.app_context():
-        return Test.query.filter_by(id=id_).first()
+def find_test(test_id):
+    try:
+        return collection_tests.find_one({'id': test_id})
+    except Exception as e:
+        print(f"Помилка пошуку тесту: {e}")
+        return None
 
 def first_tema_test(tema_test_id):
-    with app.app_context():
-      return Test.query.filter_by(tema_test_id=tema_test_id).first()
-
+    try:
+        return collection_tests.find_one({'tema_test_id': tema_test_id})
+    except Exception as e:
+        print(f"Помилка пошуку першого тесту в темі тесту: {e}")
+        return None
 def add_test(num_quest, quest_img, quest_text, ans_data, vidpov, tema_test_id):
-    with app.app_context():
-        try:
-            new_test = Test(
-                num_quest=num_quest,
-                quest_img=quest_img,
-                quest_text=quest_text,
-                ans_data=ans_data,
-                vidpov=vidpov,
-                tema_test_id=tema_test_id
+    try:
+        test_data = {
+            'num_quest': num_quest,
+            'quest_img': quest_img,
+            'quest_text': quest_text,
+            'ans_data': ans_data,
+            'vidpov': vidpov,
+            'tema_test_id': tema_test_id
+        }
+        result = collection_tests.insert_one(test_data)
+        tema_test = collection_tema_test.find_one({'id': tema_test_id})
+        if tema_test:
+            collection_tema_test.update_one(
+                {'id': tema_test_id},
+                {'$push': {'test_list': result.inserted_id}}
             )
-            db.session.add(new_test)
-            db.session.commit()
-        except Exception as e:
-            print(f"Помилка додавання тесту: {e}")
+        return result.inserted_id
+    except Exception as e:
+        print(f"Помилка додавання тесту: {e}")
+        return None
 
 def update_test(test_id, num_quest, quest_img, quest_text, ans_data, vidpov):
-    with app.app_context():
-        try:
-            test = Test.query.get(test_id)
-            test.num_quest = num_quest
-            test.quest_img = quest_img
-            test.quest_text = quest_text
-            test.ans_data = ans_data
-            test.vidpov = vidpov
-            db.session.commit()
-        except Exception as e:
-            print(f"Помилка зміни тесту: {e}")
-
-def update_by_id(class_, id_, update_data):
-    with app.app_context():
-        try:
-            item = class_.query.filter_by(id=id_).first()
-            if item:
-                for key, value in update_data.items():
-                    setattr(item, key, value)
-                db.session.commit()
-                return True
-            else:
-                return False
-        except Exception as e:
-            print(f"Помилка оновлення запису: {e}")
-            return False
-
-def delete_by_id(class_, id_):
-    with app.app_context():
-        try:
-            item = class_.query.filter_by(id=id_).first()
-            if item:
-                db.session.delete(item)
-                db.session.commit()
-                return True
-            else:
-                return False
-        except Exception as e:
-            print(f"Помилка видалення запису: {e}")
-            return False
-
-def find_test(id_):
-    return Test.query.filter_by(id=id_).first()
-
-def find_by_id(class_, id_):
     try:
-        with app.app_context():
-            item = class_.query.filter_by(id=id_).first()
-            if item:
-                if class_ == Predmet:
-                    item.claass_list
-                elif class_ == Claass:
-                    item.tema_test_list
-            return item
+        update_data = {
+            'num_quest': num_quest,
+            'quest_img': quest_img,
+            'quest_text': quest_text,
+            'ans_data': ans_data,
+            'vidpov': vidpov
+        }
+        result = collection_tests.update_one({'id': test_id}, {'$set': update_data})
+        return result.modified_count > 0
+    except Exception as e:
+        print(f"Помилка оновлення тесту: {e}")
+        return False
+
+def update_by_id(collection, id_, update_data):
+    try:
+        result = collection.update_one({'id': id_}, {'$set': update_data})
+        return result.modified_count > 0
+    except Exception as e:
+        print(f"Помилка оновлення запису: {e}")
+        return False
+
+def delete_by_id(collection, id_):
+    try:
+        result = collection.delete_one({'id': id_})
+        return result.deleted_count > 0
+    except Exception as e:
+        print(f"Помилка видалення запису: {e}")
+        return False
+
+def find_by_id(collection, id_):
+    try:
+        return collection.find_one({'id': id_})
     except Exception as e:
         print(f"Помилка пошуку запису: {e}")
         return None
 
-def get_all_items(class_):
-    
-        try:
-            with app.app_context():
-                items = class_.query.all()
-            # if class_ == Predmet:
-            #     for item in items:
-            #         item.claass_list
-            # elif class_ == Claass:
-            #     for item in items:
-            #         item.tema_test_list
-            return items
-        except Exception as e:
-            print(f"Помилка отримання всіх записів: {e}")
-            return []
+def get_all_items(collection):
+    try:
+        return list(collection.find())
+    except Exception as e:
+        print(f"Помилка отримання всіх записів: {e}")
+        return []
 
 def delete_tema_test_and_tests(tema_test_id):
-    with app.app_context():
-        Test.query.filter_by(tema_test_id=tema_test_id).delete()
-        Tema_test.query.filter_by(id=tema_test_id).delete()
+    try:
+        # Видалення тестів, пов'язаних з темою тесту
+        collection_tests.delete_many({'tema_test_id': tema_test_id})
+        # Видалення теми тесту
+        collection_tema_test.delete_one({'id': tema_test_id})
+    except Exception as e:
+        print(f"Помилка видалення теми тесту і тестів: {e}")
 
 def update_test_num_quest(test_id, num_quest):
     try:
-        with app.app_context():
-            test = Test.query.get(test_id)
-            test.num_quest = num_quest
-      
+        result = collection_tests.update_one({'id': test_id}, {'$set': {'num_quest': num_quest}})
+        return result.modified_count > 0
     except Exception as e:
-        print(f"Помилка зміни тесту: {e}")
+        print(f"Помилка оновлення номера питання тесту: {e}")
+        return False
 
 def find_last_test():
-    return Test.query.order_by(Test.num_quest.desc()).first()
+    try:
+        return list(collection_tests.find().sort('num_quest', -1).limit(1))
+    except Exception as e:
+        print(f"Помилка пошуку останнього тесту: {e}")
+        return []
 
 def min_max_test_id(tema_test_id):
     try:
-        with app.app_context():
-            record = find_temi_by_test(tema_test_id)
-        if record:
-            return [m.id for m in record]
+        test_ids = [test['id'] for test in collection_tests.find({'tema_test_id': tema_test_id})]
+        return test_ids
     except Exception as e:
-        print(f"Помилка пошуку останнього тесту: {e}")
-        return None
+        print(f"Помилка пошуку ідентифікаторів тестів: {e}")
+        return []
 
 def jopa():
     pass
-

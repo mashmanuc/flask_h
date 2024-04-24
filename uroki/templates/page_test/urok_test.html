@@ -9,7 +9,7 @@
 {% for tem in temma %}
     <main role="main">
 
-       <li> <a class="btn btn-dark" href="{{ url_for('uroki.page_test', tema_test_id=tem.id ) }}"><h2>{{ tem.test_name }}</h2></a></li>
+       <li> <a class="btn btn-dark" href="{{ url_for('uroki.page_test', tema_test_id=tem['id'] ) }}"><h2>{{ tem['test_name'] }}</h2></a></li>
        <p></p>
 
     </main>

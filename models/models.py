@@ -1,155 +1,139 @@
 from flask import flash
-
 from passlib.hash import sha256_crypt
-
 from datetime import datetime
 from flask_login import UserMixin
+from pymongo import MongoClient, errors
+from config import MONGO_KEY
 
 
-# DEFINE YOUR MODELS HERE
+# Підключення до MongoDB
 
-# app = Flask(__name__)
-# app.config.from_object('config')
-# db.init_app(app)
+client = MongoClient(MONGO_KEY)
+db = client['users']
+users_collection = db['users']
+user_test_collection = db['user_test']
 
-from cread_app import db,app,create_tables
+# class User(UserMixin):
+#     def __init__(self, username, email, password):
+#         self.username = username
+#         self.email = email
+#         self.password = sha256_crypt.encrypt(password)
 
+#     def checkPassword(self, entered_password):
+#         return sha256_crypt.verify(entered_password, self.password)
 
+#     def get_id(self):
+#         return str(self.id)
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
+#     @staticmethod
+#     def get_user_by_username(username):
+#         user = users_collection.find_one({"username": username})
+#         return user
 
-    def checkPassword(self, entered_password):
-        return sha256_crypt.verify(entered_password, self.password)
+#     @staticmethod
+#     def add_user_to_database(username, email, password):
+#         try:
+#             new_user = {
+#                 "username": username,
+#                 "email": email,
+#                 "password": sha256_crypt.encrypt(password)
+#             }
+#             users_collection.insert_one(new_user)
+#             flash('Тепер ви зареєстровані та можете увійти!', 'success')
+#             return True
+#         except Exception as e:
+#             flash('Error: User already exists.')
+#             return False
+from passlib.hash import sha256_crypt  # Assuming SHA-256 for now (consider bcrypt)
 
+class User(UserMixin):
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = sha256_crypt.encrypt(password)
 
-        return None
+    def checkPassword(self, entered_password):
+        return sha256_crypt.verify(entered_password, self.password)
+
     def get_id(self):
-        return str(self.id)
+        # Replace with the appropriate unique identifier field
+        return self.username  # Example (adjust based on your data model)
 
-class User_test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    num_quest=db.Column(db.Integer, nullable=False)
-    users_id = db.Column(db.Integer, nullable=False)
-    tema_test_id =  db.Column(db.Integer, nullable=False)
-    test_id = db.Column(db.Integer, nullable=False)
-    vid = db.Column(db.String(120), nullable=False)
-    pr_vid= db.Column(db.String(120), nullable=False)
-    date_completed = db.Column(db.DateTime, default=datetime.utcnow)
+    @staticmethod
+    def get_user_by_username(username, users_collection):  # Explicitly pass collection
+        user = users_collection.find_one({"username": username})
+        return user
 
-
-
-    def __init__(self, users_id,num_quest,tema_test_id, test_id,  vid,  pr_vid  ):
-            self.users_id = users_id
-            self.num_quest=num_quest
-            self.tema_test_id  = tema_test_id
-            self.test_id = test_id
-            self.vid = vid
-            self.pr_vid  = pr_vid
-# def add_user_test(users_id, tema_test_id, test_id, vid, pr_vid):
-#     new_user_test = User_test(users_id=users_id, tema_test_id=tema_test_id, test_id=test_id, vid=vid, pr_vid=pr_vid)
-#     db.session.add(new_user_test)
-#     db.session.commit()
-create_tables()
-def add_user_test(users_id,num_quest, tema_test_id, test_id, vid, pr_vid):
-    # Перевірка, чи існує вже запис для користувача і номера тесту
-    existing_record = User_test.query.filter_by(users_id=users_id, test_id=test_id).first()
+    @staticmethod
+    def add_user_to_database(username, email, password, users_collection):
+        try:
+            new_user = {
+                "username": username,
+                "email": email,
+                "password": sha256_crypt.encrypt(password)
+            }
+            users_collection.insert_one(new_user)
+            return True
+        except errors.DuplicateKeyError as e:
+            # Handle duplicate username error more specifically
+            return False
+        except Exception as e:
+            # Handle other potential errors
+            return False
+def add_user_test(users_id, num_quest, tema_test_id, test_id, vid, pr_vid):
+    existing_record = user_test_collection.find_one({"users_id": users_id, "test_id": test_id})
 
     if existing_record:
-        # Якщо запис існує, змінюємо його значення
-        existing_record.vid = vid
-        existing_record.pr_vid = pr_vid
+        user_test_collection.update_one(
+            {"users_id": users_id, "test_id": test_id},
+            {"$set": {"vid": vid, "pr_vid": pr_vid}}
+        )
     else:
-        # Якщо запису немає, додаємо новий запис
-        new_user_test = User_test(users_id=users_id,num_quest=num_quest, tema_test_id=tema_test_id, test_id=test_id, vid=vid, pr_vid=pr_vid)
-        db.session.add(new_user_test)
+        new_user_test = {
+            "users_id": users_id,
+            "num_quest": num_quest,
+            "tema_test_id": tema_test_id,
+            "test_id": test_id,
+            "vid": vid,
+            "pr_vid": pr_vid,
+            "date_completed": datetime.utcnow()
+        }
+        user_test_collection.insert_one(new_user_test)
 
-    # Зберігаємо зміни в базі даних
-    db.session.commit()
 def user_test(users_id, tema_test_id):
-    # Перевірка, чи існує вже запис для користувача і номера тесту
-    record = User_test.query.filter_by(users_id=users_id, tema_test_id=tema_test_id).all()
-
-    if record:
-       return [ (m.test_id , m.vid, (m.num_quest.split()[-1]) ) for m in record  ]
+    records = list(user_test_collection.find({"users_id": users_id, "tema_test_id": tema_test_id}))
+    return [(record["test_id"], record["vid"], record["num_quest"].split()[-1]) for record in records]
 
 def user_res_test(users_id, tema_test_id):
-    user_test_results = User_test.query.filter_by(users_id=users_id, tema_test_id=tema_test_id).order_by(User_test.test_id.asc()).all()
-    return user_test_results
+    return list(user_test_collection.find({"users_id": users_id, "tema_test_id": tema_test_id}, {"_id": 0}).sort("test_id", 1))
 
 def dinamic(users_id, tema_test_id):
-    record = User_test.query.filter_by(users_id=users_id, tema_test_id=tema_test_id).all()
-
-    if record:
-       return [ m.test_id  for m in record  ]
-
-
-def get_user_by_username(username):
-   
-    user = User.query.filter_by(username=username).first()
-    return user
-
-def add_user_to_database(username, email, password):
-    try:
-        user = User(username, email, password)
-        db.session.add(user)
-        db.session.commit()
-        flash('Тепер ви зареєстровані та можете увійти!', 'success')
-        return True
-    except Exception as e:
-        db.session.rollback()  # Відміна транзакції в разі помилки
-        flash('Error: User already exists.')
-        return False
+    records = list(user_test_collection.find({"users_id": users_id, "tema_test_id": tema_test_id}))
+    return [record["test_id"] for record in records]
 
 def user_t_ans(users_id, tema_test_id):
-    # Перевірка, чи існує вже запис для користувача і номера тесту
-    record = User_test.query.filter_by(users_id=users_id, tema_test_id=tema_test_id).all()
-
-    if record:
-       return [ (m.test_id, m.vid) for m in record  ]
+    records = list(user_test_collection.find({"users_id": users_id, "tema_test_id": tema_test_id}, {"test_id": 1, "vid": 1, "_id": 0}))
+    return [(record["test_id"], record["vid"]) for record in records]
 
 def find_vid(users_id, tema_test_id, test_id):
-    # Використовуйте метод query вашого ORM для пошуку відповідного запису в базі даних.
-    user_test_record = User_test.query.filter_by(users_id=users_id, tema_test_id=tema_test_id, test_id=test_id).first()
-
-    # Перевірте, чи знайдено відповідний запис.
+    user_test_record = user_test_collection.find_one({"users_id": users_id, "tema_test_id": tema_test_id, "test_id": test_id})
     if user_test_record:
-        return user_test_record.vid
+        return user_test_record["vid"]
     else:
-        return None  # Або ви можете повернути яке-небудь значення за замовчуванням або порожній рядок.
-
+        return None
 
 def vidsotok(users_id, tema_test_id):
     ress = user_res_test(users_id, tema_test_id)
     summa = 0
     for res in ress:
-        print(res.vid)
-        print(res.pr_vid)
-        # Вирівнюємо рядки за довжиною
-        len_diff = len(res.vid) - len(res.pr_vid)
+        len_diff = len(res["vid"]) - len(res["pr_vid"])
         if len_diff > 0:
-            res.pr_vid = res.pr_vid.ljust(len(res.vid), ' ')
+            res["pr_vid"] = res["pr_vid"].ljust(len(res["vid"]), ' ')
         elif len_diff < 0:
-            res.vid = res.vid.ljust(len(res.pr_vid), ' ')
+            res["vid"] = res["vid"].ljust(len(res["pr_vid"]), ' ')
 
-        # Додатковий вивід для аналізу
-        print(f"Length vid: {len(res.vid)}, Length pr_vid: {len(res.pr_vid)}")
-        print(f"Чи дорівнює vid pr_vid? {res.pr_vid.lower() == res.vid.lower()}")
-
-        if res.pr_vid.lower() == res.vid.lower():
-            print(summa)
+        if res["pr_vid"].lower() == res["vid"].lower():
             summa += 1
-    print(summa)
 
-    vid = round((summa / len(ress)) * 100)
+    vid = round((summa / len(ress)) * 100) if ress else 0
     return vid
-
-
-

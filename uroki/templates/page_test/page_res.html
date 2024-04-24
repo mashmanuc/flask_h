@@ -18,17 +18,17 @@
         <div class="card mb-4 shadow-sm">
             {% for res in ress %}
             <div class="btn-group" >
-                <div class="card-text" >{{res.num_quest}}</div>
-                    {% if res.pr_vid == res.vid %}
+                <div class="card-text" >{{res['num_quest']}}</div>
+                    {% if res['pr_vid'] == res['vid'] %}
                     <ion-icon name="close-outline">+</ion-icon>
                     {% else %}
                    <ion-icon name="checkmark-outline">-</ion-icon>
 
                     {% endif %}
                           <button type="button" class="btn btn-sm btn-other-style">
-                            <a class="btn btn-light" href="#">{{res.vid}}</a>
+                            <a class="btn btn-light" href="#">{{res['vid']}}</a>
                         </button>
-                        {#  {{res.pr_vid}} #}
+                        {#  {{res['pr_vid']}} #}
 
             </div>
             {% endfor %}

@@ -4,15 +4,16 @@ load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+MONGO_KEY = os.environ.get('MONGO_KEY')
 
-
-MONGO_KEY={}
 class Config:
     
     
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'basaSS.db')
+   
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    MONGO_KEY = os.environ.get('MONGO_KEY')
+    
+    # SECRET_KEY ='dFt5Fn3CZEFnbj3hhf0000000eZ555555dRsXS9UhkLaH3q3'
+    
    
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace(
     #     'postgres://', 'postgresql://') or \
