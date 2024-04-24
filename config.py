@@ -9,4 +9,5 @@ MONGO_KEY='mongodb+srv://mashmanuc:1WTFCFWcW5gbAYCU@cluster0.vbybi6i.mongodb.net
 class Config:
  
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = 'dFt5Fn3CZEFnbj3hhf0000000eZ555555dRsXS9UhkLaH3q3'
     
