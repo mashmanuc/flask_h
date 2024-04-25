@@ -42,7 +42,7 @@ def testes_ur(id):
 
 @uroki.route('/testes_ur/<int:tema_test_id>/<int:test_id>/<string:an>/')
 def save_test(tema_test_id, test_id, an):
-    users_id = current_user.id
+    users_id = current_user.name
     tema_test_id = 1
     temma = find_Tema_test_by_id(tema_test_id)
     data = find_temi_by_test(tema_test_id)
@@ -65,7 +65,7 @@ def urok_test():
 
 @uroki.route('/page_test/<int:tema_test_id>/')
 def page_test(tema_test_id):
-    users_id = current_user.id
+    users_id = current_user.name
     temma = find_Tema_test_by_id(tema_test_id)
     test = first_tema_test(tema_test_id)
     m_ans = tes_ans(test['id'])
@@ -78,7 +78,7 @@ def page_test(tema_test_id):
 def show_question(tema_test_id, test_id, an):
     temma = find_Tema_test_by_id(tema_test_id)
     test = find_test(test_id)
-    users_id = current_user.id
+    users_id = current_user.name
     pr_vid = test['vidpov']
     num_quest = test['num_quest']
     add_user_test(users_id, num_quest, tema_test_id, test_id, an, pr_vid)
@@ -91,7 +91,7 @@ def show_question(tema_test_id, test_id, an):
 @uroki.route('/show_next_quest/<int:tema_test_id>/<int:test_id>')
 def show_next_quest(tema_test_id, test_id):
     temma = find_Tema_test_by_id(tema_test_id)
-    users_id = current_user.id
+    users_id = current_user.name
     next_test_id = test_id + 1
     next_test = find_test(next_test_id)
     tata = find_vid(users_id, tema_test_id, next_test['id'])
@@ -103,7 +103,7 @@ def show_next_quest(tema_test_id, test_id):
 @uroki.route('/show_res/<int:tema_test_id>')
 def show_res(tema_test_id):
     temma = find_Tema_test_by_id(tema_test_id)
-    users_id = current_user.id
+    users_id = current_user.name
     vids = vidsotok(users_id, tema_test_id)
     ress = user_res_test(users_id, tema_test_id)
     return render_template('page_test/page_res.html', vids=vids, ress=ress, temma=temma)
@@ -195,7 +195,7 @@ def show_res(tema_test_id):
 
 # @uroki.route('/testes_ur/<int:tema_test_id>/<int:test_id>/<string:an>/')
 # def save_test(tema_test_id,test_id,an):
-#     users_id=current_user.id
+#     users_id=current_user.name
 #     tema_test_id=1
 #     temma=find_Tema_test_by_id(tema_test_id)
 #     data=find_temi_by_test(tema_test_id)
@@ -223,7 +223,7 @@ def show_res(tema_test_id):
 
 # # @uroki.route('/page_test/<int:tema_test_id>/')
 # # def page_test(tema_test_id):
-# #     users_id=current_user.id
+# #     users_id=current_user.name
 # #     temma=find_Tema_test_by_id(tema_test_id)
 # #     test=first_tema_test( tema_test_id)
 # #     m_ans=tes_ans(test.id)
@@ -238,7 +238,7 @@ def show_res(tema_test_id):
 # # def show_question(tema_test_id,test_id,an):
 # #     temma = find_Tema_test_by_id(tema_test_id)
 # #     test = find_test(test_id)
-# #     users_id=current_user.id
+# #     users_id=current_user.name
 # #     temma = find_Tema_test_by_id(tema_test_id)
 # #     pr_vid=test.vidpov
 # #     num_quest =test.num_quest
@@ -252,7 +252,7 @@ def show_res(tema_test_id):
 # # @uroki.route('/show_next_quest/<int:tema_test_id>/<int:test_id>')
 # # def show_next_quest(tema_test_id,test_id):
 # #     temma=find_Tema_test_by_id(tema_test_id)
-# #     users_id=current_user.id
+# #     users_id=current_user.name
 # #     test=find_test(test_id+1)
 # #     tata=find_vid(users_id, tema_test_id, test.id)
 # #     m_ans=tes_ans(test_id+1)
@@ -264,13 +264,13 @@ def show_res(tema_test_id):
 # # @uroki.route('/show_res/<int:tema_test_id>')
 # # def show_res(tema_test_id):
 # #     temma=find_Tema_test_by_id(tema_test_id)
-# #     users_id=current_user.id
+# #     users_id=current_user.name
 # #     vids=vidsotok(users_id, tema_test_id)
 # #     ress=user_res_test(users_id, tema_test_id)
 # #     return render_template('page_test/page_res.html',vids=vids,ress=ress,temma=temma)
 # @uroki.route('/page_test/<int:tema_test_id>/')
 # def page_test(tema_test_id):
-#     users_id = current_user.id
+#     users_id = current_user.name
 #     temma = find_Tema_test_by_id(tema_test_id)
 #     test = first_tema_test(tema_test_id)
 #     m_ans = tes_ans(test['id'])
@@ -283,7 +283,7 @@ def show_res(tema_test_id):
 # def show_question(tema_test_id, test_id, an):
 #     temma = find_Tema_test_by_id(tema_test_id)
 #     test = find_test(test_id)
-#     users_id = current_user.id
+#     users_id = current_user.name
 #     pr_vid = test['vidpov']
 #     num_quest = test['num_quest']
 #     add_user_test(users_id, num_quest, tema_test_id, test_id, an, pr_vid)
@@ -296,7 +296,7 @@ def show_res(tema_test_id):
 # @uroki.route('/show_next_quest/<int:tema_test_id>/<int:test_id>')
 # def show_next_quest(tema_test_id, test_id):
 #     temma = find_Tema_test_by_id(tema_test_id)
-#     users_id = current_user.id
+#     users_id = current_user.name
 #     next_test = find_test(test_id + 1)
 #     tata = find_vid(users_id, tema_test_id, next_test['id'])
 #     m_ans = tes_ans(test_id + 1)
@@ -307,7 +307,7 @@ def show_res(tema_test_id):
 # @uroki.route('/show_res/<int:tema_test_id>')
 # def show_res(tema_test_id):
 #     temma = find_Tema_test_by_id(tema_test_id)
-#     users_id = current_user.id
+#     users_id = current_user.name
 #     vids = vidsotok(users_id, tema_test_id)
 #     ress = user_res_test(users_id, tema_test_id)
 #     return render_template('page_test/page_res.html', vids=vids, ress=ress, temma=temma)

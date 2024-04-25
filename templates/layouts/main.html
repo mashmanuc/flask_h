@@ -11,7 +11,7 @@
         <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3 {% if request.endpoint == 'home' %} active {% endif %}"  href="{{ url_for('home') }}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> ГОЛОВНА</font></font></a>
 
         {% if current_user.is_authenticated %}
-          <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">{{ current_user.username }}</a>
+          <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">{{ current_user.name }}</a>
           <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="{{ url_for('logout') }}"><button class="btn btn-sm btn-outline-secondary">Вийти</button></a>
       {% else %}
           <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="{{ url_for('register') }}"><button class="btn btn-sm btn-outline-secondary">РЕЄСТРАЦІЯ</button></a> &nbsp;

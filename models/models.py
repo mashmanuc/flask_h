@@ -1,85 +1,43 @@
-from flask import flash
-from passlib.hash import sha256_crypt
+import bcrypt
 from datetime import datetime
-from flask_login import UserMixin
 from pymongo import MongoClient, errors
 from config import MONGO_KEY
-
-
-# Підключення до MongoDB
 
 client = MongoClient(MONGO_KEY)
 db = client['users']
 users_collection = db['users']
 user_test_collection = db['user_test']
 
-# class User(UserMixin):
-#     def __init__(self, username, email, password):
-#         self.username = username
-#         self.email = email
-#         self.password = sha256_crypt.encrypt(password)
-
-#     def checkPassword(self, entered_password):
-#         return sha256_crypt.verify(entered_password, self.password)
-
-#     def get_id(self):
-#         return str(self.id)
-
-#     @staticmethod
-#     def get_user_by_username(username):
-#         user = users_collection.find_one({"username": username})
-#         return user
-
-#     @staticmethod
-#     def add_user_to_database(username, email, password):
-#         try:
-#             new_user = {
-#                 "username": username,
-#                 "email": email,
-#                 "password": sha256_crypt.encrypt(password)
-#             }
-#             users_collection.insert_one(new_user)
-#             flash('Тепер ви зареєстровані та можете увійти!', 'success')
-#             return True
-#         except Exception as e:
-#             flash('Error: User already exists.')
-#             return False
-from passlib.hash import sha256_crypt  # Assuming SHA-256 for now (consider bcrypt)
-
-class User(UserMixin):
+class User:
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
-        self.password = sha256_crypt.encrypt(password)
+        self.password = password  # Використовуємо вже закодований пароль
 
     def checkPassword(self, entered_password):
-        return sha256_crypt.verify(entered_password, self.password)
+        return bcrypt.checkpw(entered_password.encode('utf-8'), self.password)
 
-    def get_id(self):
-        # Replace with the appropriate unique identifier field
-        return self.username  # Example (adjust based on your data model)
 
     @staticmethod
-    def get_user_by_username(username, users_collection):  # Explicitly pass collection
-        user = users_collection.find_one({"username": username})
-        return user
+    def get_user_by_username(username, users_collection):
+        return users_collection.find_one({"username": username})
 
-    @staticmethod
-    def add_user_to_database(username, email, password, users_collection):
+    @classmethod
+    def add_user_to_database(cls, username, email, password, users_collection):
         try:
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             new_user = {
                 "username": username,
                 "email": email,
-                "password": sha256_crypt.encrypt(password)
+                "password": hashed_password
             }
             users_collection.insert_one(new_user)
             return True
         except errors.DuplicateKeyError as e:
-            # Handle duplicate username error more specifically
             return False
         except Exception as e:
-            # Handle other potential errors
             return False
+
 def add_user_test(users_id, num_quest, tema_test_id, test_id, vid, pr_vid):
     existing_record = user_test_collection.find_one({"users_id": users_id, "test_id": test_id})
 

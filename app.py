@@ -4,16 +4,13 @@ import logging
 from logging import Formatter, FileHandler
 from forms import LoginForm, RegisterForm
 from config import Config
+import models
 
 # Створюємо екземпляр додатку Flask
 app = Flask(__name__)
-from models import User,users_collection
+
 # Конфігурація Flask (наприклад, секретний ключ)
 app.config.from_object(Config)
-
-
-# Імпортуємо функції з моделей MongoDB
-
 
 # Імпортуємо сторінки для різних розділів (наприклад, урокі, адмін-панель)
 from uroki.uroki import uroki
@@ -32,18 +29,14 @@ class LoginUser(UserMixin):
         return self.is_authenticated and self.id == 'admin'
 
 # Завантаження користувача для Flask-Login
-
 @login_manager.user_loader
 def user_loader(username):
-    user = User.get_user_by_username(username, users_collection)  # Pass users_collection
-    if user is None:
+    user_data = models.User.get_user_by_username(username, models.users_collection)
+    if user_data is None:
         return None
 
     login_user = LoginUser()
-    login_user.id = user.get('username')
-    login_user.username = user.get('username')
-    # Додайте інші поля користувача, які вам потрібні
-
+    login_user.name = username
     return login_user
 
 # Головна сторінка
@@ -73,41 +66,58 @@ def profile():
         <a href="/logout">Logout</a>
     """.format(current_user.username)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         username = form.username.data
         password = form.password.data
-
         # Fetch user by username
-        user = User.get_user_by_username(username, users_collection)
+        user_data = models.User.get_user_by_username(username, models.users_collection)
 
         # Validate credentials (if user is found)
-        if user:
+        if user_data:
+            user = models.User(user_data['username'], user_data['email'], user_data['password'])
+         
             if user.checkPassword(password):
-                # User authenticated successfully
-                login_user(user, remember=form.remember_me.data)  # Use user object for login
+                # Створення екземпляра класу LoginUser
+                user_login = LoginUser()
+                user_login.id = user_data['username']
+                
+                # Автентифікація користувача
+                login_user(user_login, remember=form.remember.data)
                 return redirect(url_for('home'))
             else:
-                # Invalid password
-                flash('Invalid password.', 'danger')  # Use a category for styling
+                flash('Invalid password.', 'danger')
         else:
-            # Username not found
-            flash('Invalid username or password.', 'danger')  # More generic message
+            flash('Invalid username or password.', 'danger')
 
     return render_template('forms/login.html', form=form)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        if not User.add_user_to_database(form.username.data, form.email.data, form.password.data, users_collection):  # Pass users_collection
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+
+        # Перевірка, чи користувача ще не існує в базі даних
+        if models.User.get_user_by_username(username, models.users_collection) is not None:
+            flash('Користувач з таким ім\'ям вже існує.', 'danger')
             return redirect(url_for('register'))
-        flash('Тепер ви зареєстровані та можете увійти!', 'success')
-        return redirect(url_for('login'))
+
+        # Додавання користувача до бази даних
+        if models.User.add_user_to_database(username, email, password, models.users_collection):
+            flash('Тепер ви зареєстровані та можете увійти!', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('Щось пішло не так. Будь ласка, спробуйте ще раз.', 'danger')
+
     return render_template('forms/register.html', form=form)
+
+
 # Вихід з облікового запису
 @app.route('/logout')
 @login_required
