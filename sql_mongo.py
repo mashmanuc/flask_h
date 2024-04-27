@@ -4,7 +4,7 @@ import sqlite3
 
 # Підключення до MongoDB
 mongo_key = os.environ.get('mongo_key')
-print(mongo_key)
+# print(mongo_key)
 client = MongoClient("mongodb+srv://mashmanuc:1WTFCFWcW5gbAYCU@cluster0.vbybi6i.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 mongo_db = client['users']
 collection_predmet = mongo_db['predmet']

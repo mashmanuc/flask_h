@@ -5,6 +5,9 @@ from logging import Formatter, FileHandler
 from forms import LoginForm, RegisterForm
 from config import Config
 import models
+from config import MONGO_KEY
+from pymongo import MongoClient
+client = MongoClient(MONGO_KEY)
 
 # Створюємо екземпляр додатку Flask
 app = Flask(__name__)
@@ -17,7 +20,8 @@ from uroki.uroki import uroki
 app.register_blueprint(uroki, url_prefix='/uroki')
 from admin.admin import admin
 app.register_blueprint(admin, url_prefix='/admin')
-
+from nmt.nmt import nmt
+app.register_blueprint(nmt, url_prefix='/nmt')
 # Ініціалізація Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -41,8 +45,11 @@ def user_loader(username):
 
 # Головна сторінка
 @app.route('/')
+
 def home():
-    return render_template('pages/placeholder.home.html')
+    
+
+    return render_template('pages/placeholder.home.html' )
 
 # Сторінка "Про нас"
 @app.route('/about')

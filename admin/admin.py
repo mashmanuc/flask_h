@@ -60,14 +60,25 @@ def tema_test_ad(id):
     pagination_info = paginate_query(test_names, page, per_page)
     return render_template('tema_test_ad.html', pagination=pagination_info, id=id, pre=pre)
 
+# @admin.route('/testes_ad/<int:id>')
+# def testes_ad(id):
+#     data = find_temi_by_test(id)
+#     temma = find_Tema_test_by_id(id)
+#     # Додайте додаткову логіку для обробки data та temma
+#     # return render_template('testes_ad.html', data=data, temma=temma)
+#     m_ans=mass_ans(id)
+#     return render_template('testes_ad.html',data=data, m_ans= m_ans, temma=temma)
+
+
 @admin.route('/testes_ad/<int:id>')
 def testes_ad(id):
     data = find_temi_by_test(id)
     temma = find_Tema_test_by_id(id)
-    # Додайте додаткову логіку для обробки data та temma
-    # return render_template('testes_ad.html', data=data, temma=temma)
-    m_ans=mass_ans(id)
-    return render_template('testes_ad.html',data=data, m_ans= m_ans, temma=temma)
+    tests = data  # Передаємо дані як змінну tests в шаблон
+    return render_template('testes_ad.html', tests=tests, temma=temma)
+
+
+
 @admin.route('/add_temy_site/<int:id>')
 def add_temy_site(id):
     if request.method == 'GET':

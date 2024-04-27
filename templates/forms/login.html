@@ -1,11 +1,11 @@
 {% extends 'layouts/main.html' %}
 {% block title %}Вхід{% endblock %}
 {% block content %}
-  <form method="post",class="btn btn-sm btn-other-style">>
+  <form method="post",class="btn btn-sm btn-other-style">
     <h3 class="form-heading">Вхід <a href="{{ url_for('home') }}" title="Назад на головну"><i class="fa fa-home pull-right"></i></a></h3>
     {{ form.username(class_ = 'form-control mb-3 first-input', placeholder = form.username.label.text, required = true, autofocus = true) }}
     {{ form.password(class_ = 'form-control mb-3 last-input', placeholder = form.password.label.text, required = true) }}
-    <button class="btn btn-sm btn-other-style"><a class="btn btn-dark" href="{{ url_for('register') }}">Реєстрація</a></button>
+    <!-- <button class="btn btn-sm btn-other-style"><a class="btn btn-dark" href="{{ url_for('register') }}">Реєстрація</a></button> -->
     <input type="submit" value="Вхід" class="btn btn-dark">
      </form>
 {% endblock %}

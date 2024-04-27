@@ -1,12 +1,10 @@
 {% extends 'base_ad.html' %}
 {% block title %} сайту {% endblock %}
 {% block sitebar %}
-<h1>{{pre.claass_name}}</h1>
+<h1>Панель сайту</h1>
 {% endblock %}
 
 {% block body %}
-
-
     {% for data in pagination[0] %}
 
 
@@ -14,11 +12,11 @@
 
         <li><p style="vertical-align: inherit;">    {{ data['test_name'] }}
 
-            <a  class="btn btn-sm btn-outline-secondary"href="/admin/testes_ad/{{ data['id ']}}">Відкрити</a>
+            <a  class="btn btn-sm btn-outline-secondary"href="/admin/testes_ad/{{ data.id }}">Відкрити</a>
 
-            <a  class="btn btn-sm btn-outline-secondary"href="{{ url_for('admin.dell_test_tema_ad', id=data['id'])}}">Видалити</a>
+            <a  class="btn btn-sm btn-outline-secondary"href="{{ url_for('admin.dell_test_tema_ad', id=data.id)}}">Видалити</a>
 
-            <a  class="btn btn-sm btn-outline-secondary"href="{{url_for('admin.add_temy_site', id=data['id']) }}">Додати на сайт</a></li></p>
+            <a  class="btn btn-sm btn-outline-secondary"href="#">Редагувати</a></li></p>
       </form>
 
 

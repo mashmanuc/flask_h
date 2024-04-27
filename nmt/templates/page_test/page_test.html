@@ -1,0 +1,124 @@
+{% extends 'base_ur.html' %}
+
+{% block title %}
+
+
+<title>Тести</title>{% endblock %}
+
+{% block body %}
+<main role="main">
+<div class="card mb-4 shadow-sm">
+    <div class="card-text">
+        <h3>{{temma['test_name']}}</h3>
+    </div>
+
+</div>
+    <div class="card mb-4 shadow-sm">
+    {% if dinamics%}
+
+        <div class="btn-group" role="group" aria-label="Test Navigation">
+            {% for din in min_max_t %}
+
+                {% if din in dinamics %}
+                    <button type="button" class="btn btn-sm btn-other-style">
+                        <a class="btn btn-dark"  href="{{ url_for('uroki.show_next_quest', tema_test_id=temma.id, test_id=din -1) }}">{{loop.index  }}</a>
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-sm btn-other-style">
+                        <a class="btn btn-light" href="{{ url_for('uroki.show_next_quest', tema_test_id=temma.id, test_id=din -1) }}">{{ loop.index }}</a>
+                    </button>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}<div class="btn-group" role="group" aria-label="Test Navigation">
+            {% for din in min_max_t %}
+                <button type="button" class="btn btn-sm btn-other-style">
+                    <a class="btn btn-light" href="{{ url_for('uroki.show_next_quest', tema_test_id=temma.id, test_id=din -1) }}">{{ loop.index }}</a>
+                </button>
+            {% endfor %}</div>
+    {% endif %}
+
+</div>
+
+
+    <h2>{{ test['num_quest'] }}</h2>
+
+
+
+
+
+
+
+    <div class="card mb-4 shadow-sm">
+
+
+        {% if test.quest_img is defined %}
+            <div class="textwidget custom-html-widget">
+                <img src="{{ test.quest_img }}" alt="">
+            </div>
+        {% endif %}
+
+        <div class="card-body">
+            {% if test.quest_text is defined %}
+                <div class="card-text">
+                    <h2>{{ test.quest_text }}</h2>
+                </div>
+            {% endif %}
+
+
+            <div class="btn-group">
+                {% for an in m_ans%}
+                        {% if  tata == an %}
+                        <button type="button" class="btn btn-sm btn-other-style">
+                            <a class="btn btn-outline-dark" href="{{ url_for('uroki.show_question', tema_test_id=temma.id, test_id=test.id, an=an) }}">{{an}}</a>
+                         </button>
+                            {% endif %}
+                    {% if  tata != an %}
+                        <button type="button" class="btn btn-sm btn-other-style">
+                            <a class="btn btn-dark" href="{{ url_for('uroki.show_question', tema_test_id=temma.id, test_id=test.id, an=an) }}">{{an}}</a>
+                        </button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {# Add buttons for next and previous questions #}
+
+
+        </div>
+    </div>
+    <div class="navigation-buttons">
+                {% if test.id > min_max_t[0] %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('uroki.show_next_quest', tema_test_id=temma.id, test_id=test.id-2) }}">Попереднє</a>
+                {% endif %}
+
+                {% if test.id < min_max_t[-1] %} {# Assuming max_question_id is the maximum ID of questions #}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('uroki.show_next_quest', tema_test_id=temma.id, test_id=test.id) }}">Наступне </a>
+                {% endif %}
+
+    {% if dinamics %}
+
+        {% if dinamics|length == min_max_t|length %}
+
+            <div class="btn-group" role="group" aria-label="Test Navigation">
+                <button type="button" class="btn btn-sm btn-other-style">
+                    <a class="btn btn-dark" href="{{ url_for('uroki.show_res', tema_test_id=temma.id) }}">Показати результат</a>
+                </button>
+            </div>
+         {% endif %}
+
+{% endif %}
+            </div>
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -7,7 +7,7 @@
     {{ form.email(class_ = 'form-control mb-3', placeholder = form.email.label.text, required = true) }}
     {{ form.password(class_ = 'form-control mb-3', placeholder = form.password.label.text, required = true) }}
     {{ form.confirm(class_ = 'form-control mb-3 last-input', placeholder = form.confirm.label.text, required = true) }}
-    <button class="btn btn-sm btn-other-style"><a  class="btn btn-dark" href="{{ url_for('login') }}">Вхід</a></button>
+    <!-- <button class="btn btn-sm btn-other-style"><a  class="btn btn-dark" href="{{ url_for('login') }}">Вхід</a></button> -->
     <input type="submit" value="Реєстрація" class="btn btn-dark">
     </form>
 {% endblock %}

@@ -4,7 +4,8 @@
 
 <div class="page-header">
   <h1>Тут можна перевірити свої навички з математики </h1>
+          {% for snippet in html_snippets %}
+          {{ snippet|safe }}
+        {% endfor %}
 </div>
-
-
 {% endblock %}

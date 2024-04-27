@@ -263,5 +263,3 @@ def min_max_test_id(tema_test_id):
         print(f"Помилка пошуку ідентифікаторів тестів: {e}")
         return []
 
-def jopa():
-    pass
