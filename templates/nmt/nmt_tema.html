@@ -1,0 +1,28 @@
+{% extends 'layouts/main.html' %}
+{% block title %}<title>{{ title }}</title>{% endblock %}
+{% block styles %}
+<style>
+    .gradient-background {
+        background: linear-gradient(to right, #ffff99, #ccffff);
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+
+    .gradient-background {
+        background-image: linear-gradient(to right, rgb(240, 240, 36), rgb(86, 195, 235));
+        padding: 20px;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+{% block content %} 
+    <h1>{{ title }}</h1>
+    {% for doc in collection %}
+    <div style="background-image: linear-gradient(to right, rgb(240, 240, 36), rgb(86, 195, 235)); padding: 20px;">
+        {{ doc['teg']|safe }}
+    
+    </div>
+    <p></p>
+    {% endfor %}
+{% endblock %}

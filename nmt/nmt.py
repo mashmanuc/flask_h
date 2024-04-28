@@ -13,28 +13,29 @@ client = MongoClient(MONGO_KEY)
 @nmt.route('/')
 def index_nmt():
     html_snippets = []
-    collection_names = client['nmt_snipet'].list_collection_names()
-    print(f"Collection names: {collection_names}")
+    collection_names = client['nmt_tag'].list_collection_names()
+    # print(f"Collection names: {collection_names}")
     cleaned_collection_names = [name.strip('\n') for name in collection_names]
     for collection_name in collection_names:
-        collection = client['nmt_snipet'][collection_name]
+        collection = client['nmt_tag'][collection_name]
         doc = collection.find_one()
         if doc:
             html_snippets.append(doc['teg'])
             # print(f"Document from {collection_name}: {doc}")
     print("Rendering template...")
-    return render_template('index_nmt.html', collection_names=cleaned_collection_names)
+    return render_template('nmt/index_nmt.html', collection_names=cleaned_collection_names)
 
 
 @nmt.route('/nmt_tema/<collection_name>')
 def nmt_tema(collection_name):
+    print('collection_name', collection_name)
     try:
         sanitized_collection_name = collection_name.replace('\n', '')
-        collection = client['nmt_snipet']['\n'+sanitized_collection_name+'\n']
+        collection = client['nmt_tag'][sanitized_collection_name]
         documents = list(collection.find())
-        print(documents)
+        # print(documents)
         if documents:  # Проверка на наличие документов
-            return render_template('nmt_tema.html', collection=documents, title=collection_name)
+            return render_template('nmt/nmt_tema.html', collection=documents, title=collection_name)
         else:
             return "Документы в коллекции отсутствуют"
     except Exception as e:

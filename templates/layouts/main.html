@@ -9,37 +9,41 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/uroki/urok_test/">ТЕСТИ</a>
-            <a class="nav-link {% if request.endpoint == 'home' %} active {% endif %}" href="{{ url_for('home') }}">ГОЛОВНА</a>
+            
+            <!-- <a class="nav-link {% if request.endpoint == 'home' %} active {% endif %}" href="{{ url_for('home') }}">ГОЛОВНА</a> -->
+            <a  class="navbar-brand" href="{{ url_for('home') }}">ГОЛОВНА</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link">{{ current_user.name }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"href="/nmt">HMT</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Вийти</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">РЕЄСТРАЦІЯ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">ВХІД</a>
-                    </li>
-                    {% endif %}
-                </ul>
-                <form class="d-flex" method="GET" action="/serch_">
+            <a class="navbar-brand" href="/uroki/urok_test/">ТЕСТИ</a> 
+            <a class="navbar-brand" href="/nmt">HMT</a>
+           
+        
+            {% if current_user.is_authenticated %}
+            
+            
+            
+                <a class="navbar-brand"  href="{{ url_for('logout') }}">Вийти</a>
+           
+            {% else %}
+            
+                <a class="navbar-brand"  href="{{ url_for('register') }}">РЕЄСТРАЦІЯ</a>
+            
+            
+                <a class="navbar-brand"  href="{{ url_for('login') }}">ВХІД</a>
+            
+            {% endif %}
+            {% if current_user.is_authenticated %}
+            
+                <a class="navbar-brand" >{{ current_user.name }}</a>
+            
+            {% endif %}
+                <!-- </ul> -->
+                <!-- <form class="d-flex" method="GET" action="/serch_">
                     <a class="nav-link" href="/serch_">ПОШУК</a>
                     <input class="form-control me-2" name="title_sersh" id="title_sersh" type="text" placeholder="Пошук" aria-label="Пошук">
                     <button class="btn btn-outline-light" type="submit">Знайти</button>
-                </form>
+                </form> -->
             </div>
         </div>
     </nav>
