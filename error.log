@@ -269,3 +269,4 @@ WHERE user_test.users_id = ? AND user_test.tema_test_id = ? AND user_test.test_i
 2024-04-28 12:15:43,132 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:154]
 2024-04-28 12:17:20,945 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:154]
 2024-04-28 12:18:47,290 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:154]
+2024-04-28 12:27:22,171 INFO: errors [in e:\project\heroku_flask_test\flask_h\app.py:154]
