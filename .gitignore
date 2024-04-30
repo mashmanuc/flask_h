@@ -1,6 +1,6 @@
 __pycache__
 .env
-sql_mongo.
-sql_mongo2.
+sql_mongo.py
+sql_mongo2.py
 key.pem
 cert.pem

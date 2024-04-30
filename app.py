@@ -18,8 +18,8 @@ app.config.from_object(Config)
 # Імпортуємо сторінки для різних розділів (наприклад, урокі, адмін-панель)
 from uroki.uroki import uroki
 app.register_blueprint(uroki, url_prefix='/uroki')
-from admin.admin import admin
-app.register_blueprint(admin, url_prefix='/admin')
+# from admin.admin import admin
+# app.register_blueprint(admin, url_prefix='/admin')
 from nmt.nmt import nmt
 app.register_blueprint(nmt, url_prefix='/nmt')
 # Ініціалізація Flask-Login
@@ -151,7 +151,7 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
-    app.logger.info('errors')
+  
 
 # Запуск додатку
 if __name__ == '__main__':
