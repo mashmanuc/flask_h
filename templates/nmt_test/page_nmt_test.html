@@ -1,0 +1,82 @@
+{% extends 'nmt_test/base_ur.html' %}
+{% block title %}TESTS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Тест №{{ test_data.question_number }} {{collection_name}}</h5>
+        </div>
+    </div>
+
+    <div class="btn-group btn-group-sm d-flex flex-wrap justify-content-center mb-3" role="group" aria-label="Test Navigation">
+        {% for i in range(test_data|length+1) %}
+        <button type="button" class="btn btn-sm btn-other-style m-1">
+            <a class="btn btn-light" href="{{ url_for('nmt_test.show_test', collection_name=collection_name, question_number=i+1) }}">{{ i+1 }}</a>
+        </button>
+        {% endfor %}
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        {% if test_data.question_images %}
+            {% for image_data in test_data.question_images %}
+            <div class="textwidget custom-html-widget">
+                <img src="data:image/jpeg;base64, {{ image_data }}" alt="Question Image" class="img-fluid">
+            </div>
+            <div class="question-text">
+                {{ test_data.question_text[loop.index0] | safe }}
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="question-text">
+            <h2>{{ test_data.question_text[0] | safe }}</h2>
+        </div>
+        {% endif %}
+
+        <div class="answer-options d-flex flex-wrap justify-content-center">
+            {% for option in test_data.answer_options %}
+            {% if option %}
+            <button type="button" class="btn btn-sm btn-other-style m-1">
+                <a class="btn btn-dark">{{ option }}</a>
+            </button>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <form method="post" action="{{ url_for('nmt_test.submit_answer', collection_name=collection_name, question_number=test_data.question_number) }}">
+        {% if test_data.answer_images %}
+        <div class="answer-images d-flex flex-wrap justify-content-center">
+            {% for image_data in test_data.answer_images %}
+            <button type="button" class="btn btn-sm btn-other-style m-1">
+                <img src="data:image/jpeg;base64, {{ image_data }}" alt="Answer Image" class="img-fluid">
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="d-flex justify-content-center mt-3">
+            <button type="submit" class="btn btn-light">Відправити</button>
+        </div>
+    </form>
+    
+
+    {% if test_data.question_number|int == max_question_number %}
+    <div class="d-flex justify-content-center mt-3">
+        <a class="btn btn-light" href="{{ url_for('nmt_test.show_results', collection_name=collection_name) }}">Показати результат</a>
+    </div>
+    {% else %}
+    <form method="post" action="{{ url_for('nmt_test.submit_answer_nmt', collection_name=collection_name, question_number=test_data.question_number) }}">        {% if test_data.answer_images %}
+        <div class="answer-images d-flex flex-wrap justify-content-center">
+            {% for image_data in test_data.answer_images %}
+            <button type="button" class="btn btn-sm btn-other-style m-1">
+                <img src="data:image/jpeg;base64, {{ image_data }}" alt="Answer Image" class="img-fluid">
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="d-flex justify-content-center mt-3">
+            <button type="submit" class="btn btn-light">Відправити</button>
+        </div>
+    </form>
+    {% endif %}
+{% endblock %}

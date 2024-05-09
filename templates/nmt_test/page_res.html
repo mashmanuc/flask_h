@@ -1,0 +1,42 @@
+{% extends 'nmt_test/base_ur.html' %}
+
+{% block title %}Результат{% endblock %}
+
+{% block content %}
+<main role="main" class="bg-dark text-white">
+    <div class="card bg-dark text-white mb-4 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">Тема: {{ temma }}</h3>
+        </div>
+    </div>
+    {% if no_results %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h3  class="card-title"> Ви ще не проходили цей тест.</h3>
+        </div>
+    </div>
+    {% else %}  
+
+    <div class="progress bg-secondary mb-4">
+        <div class="progress-bar bg-white progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ vids }}%;" aria-valuenow="{{ vids }}" aria-valuemin="0" aria-valuemax="100">{{ vids }}%</div>
+    </div>
+
+    <div class="card bg-dark text-white mb-4 shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Відсоток успішності:   {{ vids }} %</h4>
+        </div>
+    </div>
+
+    <div class="progress bg-secondary mb-4">
+        <div class="progress-bar bg-white progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ vids }}%;" aria-valuenow="{{ vids }}" aria-valuemin="0" aria-valuemax="100">{{ (vids * 12 / 100) | float | round }} балів</div>
+    </div>
+
+    <div class="card bg-dark text-white mb-4 shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Вітаю, {{ current_user.name }}!</h4>
+            <p class="card-text">Ви набрали {{ (vids * 12 / 100) | float | round | int }} з 12 балів.</p>
+        </div>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'nmt_test/base_ur.html' %}
+
+{% block title %} TESTS {% endblock %}
+
+{% block content %}
+
+<div class="container">
+     <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Тест №{{ test_data.question_number }} {{collection_name}}</h5>
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="btn-group">
+                {% for i in range(test_data|length+1) %}
+                    {% set question_number = i+1 %}
+                    {% set user_answer = user_answers.get(question_number, None) %}
+                    {% set btn_class = "btn btn-sm btn-other-style m-1" %}
+                    {% if test_data.question_number == question_number %}
+                        {% set btn_class = "btn btn-sm btn-other-style" %}
+                    {% endif %}
+                    {% if user_answer %}
+                        {% set btn_class = "btn btn-dark" %}
+                    {% endif %}
+                    <button type="submit"  class="class="btn btn-sm btn-other-style">
+                        <a class="{{ btn_class }}" href="{{ url_for('nmt_test.show_test', collection_name=collection_name, question_number=question_number) }}">{{ question_number }}</a>
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            {% if test_data.question_images %}
+                {% for image_data in test_data.question_images %}
+                    <div class="textwidget custom-html-widget">
+                        <img src="data:image/jpeg;base64, {{ image_data }}" alt="Question Image" class="img-fluid">
+                    </div>
+                    <div class="question-text">
+                        {{ test_data.question_text[loop.index0] | safe }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="question-text">
+                    <h2>{{ test_data.question_text[0] | safe }}</h2>
+                </div>
+            {% endif %}
+
+            <div class="btn-group btn-group-sm d-flex flex-wrap justify-content-center mb-3 d-lg-block">
+                {% if  test_data.answer_options %}
+                {% for option in test_data.answer_options %}
+                    {% if option %}
+                        <button type="submit" class="btn btn-sm btn-other-style">
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('nmt_test.submit_answer_test', collection_name=collection_name, question_number=test_data.question_number, ansver_num=loop.index) }}">{{ option }}</a>
+                        </button>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% if test_data.answer_images %}
+                    <div class="answer-images d-flex flex-wrap justify-content-center">
+                        {% for image_data in test_data.answer_images %}
+                        <button type="submit"  class="btn btn-sm btn-other-style">
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('nmt_test.submit_answer_test', collection_name=collection_name, question_number=test_data.question_number, ansver_num=loop.index) }}">
+                            <img src="data:image/jpeg;base64, {{ image_data }}" alt="Answer Image" class="img-fluid">
+                            </a>
+                        </button>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="answer-images d-flex flex-wrap justify-content-center">
+            {% if test_data.question_number|int > min_question_number %}
+              <button type="submit"  class="btn btn-sm btn-other-style">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('nmt_test.show_test', collection_name=collection_name, question_number=test_data.question_number|int - 1) }}">Попереднє</a>
+            </button>
+            
+            {% endif %}
+            
+            {% if test_data.question_number|int < max_question_number %}
+            <button type="submit"  class="btn btn-sm btn-other-style">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('nmt_test.show_test', collection_name=collection_name, question_number=test_data.question_number|int + 1) }}">Наступне</a>
+            </button>
+            {% endif %}
+            
+            {% set total_tests = test_data|length+1 %}
+            {% set total_answers = user_answers|length %}
+            
+        {% if total_answers == total_tests %}
+        <div class="text-center">
+            <button type="submit"  class= "btn btn-dark">
+            <a class="btn btn-dark" href="{{ url_for('nmt_test.show_results', collection_name=collection_name) }}">Показати результат</a>
+            </button>
+        </div>
+        {%else%}
+        <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Пройдено {{total_answers}}  з {{total_tests }} завдань </h5>
+                </div>
+           </div>
+        {% endif %}
+        </div>
+    </div>
+    
+    
+{% endblock %}

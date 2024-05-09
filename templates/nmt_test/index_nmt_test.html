@@ -1,0 +1,47 @@
+{% extends 'layouts/main.html' %}
+{% block title %}NMT{% endblock %}
+
+{% block sitebar %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6"> <!-- Перша колонка -->
+            <div class="card-deck mb-3 text-center">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="my-0 font-weight-normal">Теми</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for collection_name in collection_names[:collection_names|length//2] %}
+                            <li class="list-group-item"><a href="{{ url_for('nmt_test.nmt_test_tema', collection_name=collection_name)}}" class="text-dark">{{ collection_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6"> <!-- Друга колонка -->
+            <div class="card-deck mb-3 text-center">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="my-0 font-weight-normal">Теми</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for collection_name in collection_names[collection_names|length//2:] %}
+                            <li class="list-group-item"><a href="{{ url_for('nmt_test.nmt_test_tema', collection_name=collection_name)}}" class="text-dark">{{ collection_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

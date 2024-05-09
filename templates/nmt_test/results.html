@@ -1,0 +1,67 @@
+{% extends 'base_ur.html' %}
+
+{% block title %}
+    <title>Результати тесту</title>
+{% endblock %}
+
+{% block body %}
+<main role="main">
+    <div class="container">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Результати тестування</h3>
+                <h5 class="card-subtitle mb-2 text-muted">Тема: {{ test_data }}</h5>
+            </div>
+        </div>
+
+        {% for result in user_results %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Питання №{{ result['question_number'] }}</h5>
+                <p class="card-text">Ваша відповідь: {{ result['user_answer_index'] }}</p>
+                {% set user_answer = result['user_answer_index'] %}
+                {% set correct_answer = result['correct_answer_index'] +1%}
+                {% if result['is_correct'] %}
+                    <p class="text-success">correct_answer відповідь!  {{correct_answer}}</p>
+                    <p class="text-success">user_answer відповідь!  {{user_answerr}}</p>
+                {% else %}
+                    <p class="text-danger">Неправильна відповідь. Правильна відповідь: 
+                        {% if result['correct_answer_index'] is defined %}
+                            
+                            {% if user_answer == correct_answer %}
+                            <p class="text-success">Правильна відповідь!</p>
+                            {% else %}
+                                <span class="text-danger"><p class="text-success"> не Правильна відповідь!</p>}</span>
+                            {% endif %}
+                        {% else %}
+                            Немає даних
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+            
+        </div>
+        {% endfor %}
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Відсоток правильних відповідей</h5>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ (correct_answers / total_questions) * 100 }}%;" aria-valuenow="{{ (correct_answers / total_questions) * 100 }}" aria-valuemin="0" aria-valuemax="100">{{ (correct_answers / total_questions) * 100 }}%</div>
+                </div>
+                <p class="card-text mt-2">Ви набрали {{ correct_answers }} балів із {{ total_questions }}</p>
+            </div>
+        </div>
+
+        {% if correct_answers == total_questions %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Вітаємо!</h5>
+                <p class="card-text">Ви відповіли на всі питання правильно. Можете подивитися свій результат.</p>
+                <a href="{{ url_for('show_results', collection_name=temma.test_name) }}" class="btn btn-primary">Показати результат</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

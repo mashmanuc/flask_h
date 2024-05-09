@@ -1,0 +1,64 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block styles %}
+<style>
+    .gradient-background {
+        background-image: linear-gradient(to right, rgb(240, 240, 36), rgb(86, 195, 235));
+        padding: 20px;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    {% if collection %}
+        <div class="test-collection">
+            {% for test in collection %}
+            <div class="test">
+                <h5>Тест №{{ test.question_number }}</h5>
+                <div class="question-text gradient-background">
+                    {% set question_text = test.question_text %}
+                    {% set num_images = test.question_images|length %}
+                    
+                    {% for i in range(question_text|length) %}
+                        {{ question_text[i] | safe }}
+                        
+                        {% if i < num_images %}
+                            <img src="data:image/jpeg;base64, {{ test.question_images[i] }}" alt="Answer Image">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                
+                
+                
+                
+                
+                <div class="answer-options">
+                    {% for option in test.answer_options %}
+                    <div>{{ option }}</div>
+                    {% endfor %}
+                
+                    <p>Ідентифікатори зображень відповідей:</p>
+                    {% if test.answer_images %}
+                    <div class="answer-images">
+                        {% for image_data in test.answer_images %}
+                        <img src="data:image/jpeg;base64, {{ image_data }}" alt="Answer Image">
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <p>Номер правильної відповіді: {{ test.correct_answer_index }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Документи в колекції відсутні</p>
+    {% endif %}
+{% endblock %}
